@@ -20,10 +20,10 @@ func (c UserDB) CreateUser(name string, email string, password string, alamat st
 	})
 
 	if result.Error != nil {
-		return "GAGAL MENAMBAH AKUN"
+		return "GAGAL MENAMBAHKAN AKUN"
 	}
 
-	return "BERHASIL MENAMBAH AKUN"
+	return "BERHASIL MENAMBAHKAN AKUN"
 }
 
 func (c UserDB) Login(email string, password string) (uint, string) {
@@ -44,3 +44,4 @@ func (c UserDB) Login(email string, password string) (uint, string) {
 	
 	return id, name
 }
+

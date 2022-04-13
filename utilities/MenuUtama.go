@@ -13,7 +13,7 @@ func MenuUtama() {
 	// Get database connection
 	connection := config.ReadEnv()
 	db := config.Database(connection)
-	
+
 	// Migrate tables
 	db.AutoMigrate(&entities.User{})
 	db.AutoMigrate(&entities.Book{})
@@ -85,10 +85,18 @@ func MenuUtama() {
 							fmt.Println(Input.CreateBook(InputBook(id)))
 							separator()
 						case "4":
-							fmt.Println("Update Buku")
+							// Input := datastore.BookDB{DB: db}
+							separator()
+							fmt.Println("MENGUBAH BUKU")
+							separator()
+							// fmt.Println(Input.UpdateBook(ChangeBook(id)))
 							separator()
 						case "5":
-							fmt.Println("Hapus Buku")
+							// Input := datastore.BookDB{DB: db}
+							separator()
+							fmt.Println("MENGHAPUS BUKU")
+							separator()
+							// fmt.Println(Input.DeleteBook(id))
 							separator()
 						case "6":
 							fmt.Println("Pinjam Buku")
@@ -103,21 +111,28 @@ func MenuUtama() {
 					}
 
 					listLogin()
-				}
-			case "3":
-				fmt.Println("Lihat Daftar Buku")
+				}		
+		case "3":
+			Get := datastore.BookDB{DB: db}
+			results := Get.GetAllDataBook()
+			for _, result := range results {
 				separator()
-			case "99":
-				fmt.Println("Exit")
-			default:
-				fmt.Println("Menu Tidak Tersedia")
+				fmt.Println("ID :", result.ID)
+				fmt.Println("Judul :", result.Title)
+				fmt.Println("Pengarang :", result.Author)
 				separator()
+			}
+		case "99":
+			fmt.Println("Exit")
+		default:
+			fmt.Println("Menu Tidak Tersedia")
+			separator()
 		}
 
 		list()
 	}
-		
+
 	if err := Menu.Err(); err != nil {
 		fmt.Println("Error encountered:", err)
-	}	
+	}
 }
