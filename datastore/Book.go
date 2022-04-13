@@ -39,3 +39,18 @@ func (c BookDB) UpdateBook(title string, isbn string, author string) string {
 
 	return "BERHASIL MENGUBAH BUKU"
 }
+
+func (c BookDB) DeleteBook(title string, isbn string, author string) string {
+	// Insert data
+	result := c.DB.Create(&entities.Book{
+		Title:  title,
+		Isbn:   isbn,
+		Author: author,
+	})
+
+	if result.Error != nil {
+		return "GAGAL MENGUBAH BUKU"
+	}
+
+	return "BERHASIL MENGUBAH BUKU"
+}
