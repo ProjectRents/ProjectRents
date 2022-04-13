@@ -39,7 +39,7 @@ func (c BookDB) CreateBook(title string, isbn string, author string) string {
 
 func (c BookDB) UpdateBook(title string, isbn string, author string) string {
 	// Insert data
-	result := c.DB.Create(&entities.Book{
+	result := c.DB.Save(&entities.Book{
 		Title:  title,
 		Isbn:   isbn,
 		Author: author,
@@ -52,17 +52,12 @@ func (c BookDB) UpdateBook(title string, isbn string, author string) string {
 	return "BERHASIL MENGUBAH BUKU"
 }
 
-func (c BookDB) DeleteBook(title string, isbn string, author string) string {
-	// Insert data
-	result := c.DB.Create(&entities.Book{
-		Title:  title,
-		Isbn:   isbn,
-		Author: author,
-	})
+func (c BookDB) DeleteBook() ([]entities.Book, error) {
+	res := []entities.Book{}
 
-	if result.Error != nil {
-		return "GAGAL MENGUBAH BUKU"
+	tx := c.DB.Where("name=?", 3).Delete(BookDB)
+	if tx.Error != nil {
+		fmt.Println("Delete gagal", tx.Error)
 	}
-
-	return "BERHASIL MENGUBAH BUKU"
+	return res, nil
 }
