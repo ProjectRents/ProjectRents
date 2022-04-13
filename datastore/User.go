@@ -20,10 +20,10 @@ func (c UserDB) CreateUser(name string, email string, password string, alamat st
 	})
 
 	if result.Error != nil {
-		return "Gagal menambahkan data"
+		return "GAGAL MENAMBAH AKUN"
 	}
 
-	return "Berhasil menambahkan data"
+	return "BERHASIL MENAMBAH AKUN"
 }
 
 func (c UserDB) Login(email string, password string) (string, bool) {

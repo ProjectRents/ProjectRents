@@ -15,6 +15,7 @@ func MenuUtama() {
 	
 	// Migrate tables
 	// db.AutoMigrate(&entities.User{})
+	// db.AutoMigrate(&entities.Book{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -74,7 +75,11 @@ func MenuUtama() {
 							fmt.Println("Daftar Buku Saya")
 							separator()
 						case "3":
-							fmt.Println("Tambah Buku")
+							Input := datastore.BookDB{DB: db}
+
+							fmt.Println("MENAMBAHKAN BUKU BARU")
+							separator()
+							fmt.Println(Input.CreateBook(InputBook()))
 							separator()
 						case "4":
 							fmt.Println("Update Buku")

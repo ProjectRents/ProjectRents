@@ -1,7 +1,6 @@
 package datastore
 
 import (
-	"fmt"
 	"project_apps/entities"
 
 	"gorm.io/gorm"
@@ -11,7 +10,7 @@ type BookDB struct {
 	DB *gorm.DB
 }
 
-func (c UserDB) CreateBook(title string, isbn string, author string) {
+func (c BookDB) CreateBook(title string, isbn string, author string) (string) {
 	// Insert data
 	result := c.DB.Create(&entities.Book{
 		Title:  title,
@@ -20,7 +19,8 @@ func (c UserDB) CreateBook(title string, isbn string, author string) {
 	})
 
 	if result.Error != nil {
-		fmt.Println(result.Error)
-		return
+		return "GAGAL MENAMBAH BUKU"
 	}
+
+	return "BERHASIL MENAMBAH BUKU"
 }
