@@ -26,13 +26,21 @@ func (c UserDB) CreateUser(name string, email string, password string, alamat st
 	return "BERHASIL MENAMBAH AKUN"
 }
 
-func (c UserDB) Login(email string, password string) (string, bool) {
+func (c UserDB) Login(email string, password string) (uint, string) {
 	// Login
-	result := c.DB.Where("email = ? AND password = ?", email, password).First(&entities.User{})
+	results := []entities.User{}
+	result := c.DB.Model(&entities.User{}).Where("email = ? AND password = ?", email, password).First(&results)
 
 	if result.Error != nil {
-		return "Email atau Password Salah", false
+		return 0, "Email atau Password Salah"
 	}
-
-	return "Admin", true
+	
+	var name string
+	var id uint
+	for _, user := range results {
+		id = user.ID
+		name = user.Name
+	}
+	
+	return id, name
 }

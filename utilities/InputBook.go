@@ -6,7 +6,11 @@ import (
 	"os"
 )
 
-func InputBook() (title, isbn, author string) {
+func InputBook(u uint) (title, isbn, author string, id uint) {
+	// Input data
+
+	id = u
+	
 	fmt.Print("Masukkan judul buku: ")
 	Title := bufio.NewScanner(os.Stdin)
 	Title.Scan()

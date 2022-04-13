@@ -8,4 +8,5 @@ type User struct {
 	Email string `gorm:"type:varchar(50);not null;unique"`
 	Password string `gorm:"type:varchar(50);not null"`
 	Alamat string `gorm:"type:varchar(35);not null"`
+	Books []Book
 }

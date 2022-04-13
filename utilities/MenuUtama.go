@@ -6,6 +6,7 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
+	"project_apps/entities"
 )
 
 func MenuUtama() {
@@ -14,8 +15,10 @@ func MenuUtama() {
 	db := config.Database(connection)
 	
 	// Migrate tables
-	// db.AutoMigrate(&entities.User{})
-	// db.AutoMigrate(&entities.Book{})
+	db.AutoMigrate(&entities.User{})
+	db.AutoMigrate(&entities.Book{})
+	
+	
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -36,7 +39,7 @@ func MenuUtama() {
 			case "1":
 				// Add Account
 				Input := datastore.UserDB{DB: db}
-
+				separator()
 				fmt.Println("MENAMBAHKAN AKUN BARU")
 				separator()
 				fmt.Println(Input.CreateUser(InputUser()))
@@ -47,9 +50,9 @@ func MenuUtama() {
 
 				fmt.Println("MENU LOGIN")
 				separator()
-				result, kondisi := Input.Login(InputLogin())
+				id, result := Input.Login(InputLogin())
 
-				if kondisi == true {
+				if id != 0 {
 					fmt.Println("Selamat datang,", result)
 				} else {
 					fmt.Println(result)
@@ -76,10 +79,10 @@ func MenuUtama() {
 							separator()
 						case "3":
 							Input := datastore.BookDB{DB: db}
-
+							separator()
 							fmt.Println("MENAMBAHKAN BUKU BARU")
 							separator()
-							fmt.Println(Input.CreateBook(InputBook()))
+							fmt.Println(Input.CreateBook(InputBook(id)))
 							separator()
 						case "4":
 							fmt.Println("Update Buku")
