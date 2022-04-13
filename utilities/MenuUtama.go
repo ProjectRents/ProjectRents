@@ -34,28 +34,28 @@ func MenuUtama() {
 
 		switch line {
 		case "1":
-			// Add Account
-			Input := datastore.UserDB{DB: db}
+			// // Add Account
+			// Input := datastore.UserDB{DB: db}
 
-			fmt.Println("MENAMBAHKAN AKUN BARU")
-			separator()
-			fmt.Println(Input.CreateUser(InputUser()))
-			separator()
+			// fmt.Println("MENAMBAHKAN AKUN BARU")
+			// separator()
+			// fmt.Println(Input.CreateUser(InputUser()))
+			// separator()
 		case "2":
 			// Login
-			Input := datastore.UserDB{DB: db}
+			// Input := datastore.UserDB{DB: db}
 
-			fmt.Println("MENU LOGIN")
-			separator()
-			result, kondisi := Input.Login(InputLogin())
+			// fmt.Println("MENU LOGIN")
+			// separator()
+			// result, kondisi := Input.Login(InputLogin())
 
-			if kondisi == true {
-				fmt.Println("Selamat datang,", result)
-			} else {
-				fmt.Println(result)
-				break
-			}
-			separator()
+			// if kondisi == true {
+			// 	fmt.Println("Selamat datang,", result)
+			// } else {
+			// 	fmt.Println(result)
+			// 	break
+			// }
+			// separator()
 
 			listLogin()
 			Login := bufio.NewScanner(os.Stdin)
@@ -89,11 +89,11 @@ func MenuUtama() {
 					fmt.Println(Input.UpdateBook(ubahBook()))
 					separator()
 				case "5":
-					Input := datastore.BookDB{DB: db}
+					// Input := datastore.BookDB{DB: db}
 
 					fmt.Println("MENHAPUS BUKU")
 					separator()
-					fmt.Println(Input.DeleteBook())
+					// fmt.Println(Input.DeleteBook())
 					separator()
 				case "6":
 					fmt.Println("Pinjam Buku")
@@ -110,7 +110,8 @@ func MenuUtama() {
 				listLogin()
 			}
 		case "3":
-			fmt.Println("Lihat Daftar Buku")
+			Get := datastore.BookDB{DB: db}
+			fmt.Println(Get.GetAllDataBook())
 			separator()
 		case "99":
 			fmt.Println("Exit")
