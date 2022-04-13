@@ -38,14 +38,67 @@ func MenuUtama() {
 
 				fmt.Println("MENAMBAHKAN AKUN BARU")
 				separator()
-				Input.CreateUser(InputUser())
-				separator()
-				fmt.Println("Selamat anda telah terdaftar")
+				fmt.Println(Input.CreateUser(InputUser()))
 				separator()
 			case "2":
-				fmt.Println("Login Account")
+				// Login
+				Input := datastore.UserDB{DB: db}
+
+				fmt.Println("MENU LOGIN")
+				separator()
+				result, kondisi := Input.Login(InputLogin())
+
+				if kondisi == true {
+					fmt.Println("Selamat datang,", result)
+				} else {
+					fmt.Println(result)
+					break
+				}
+				separator()
+				
+				listLogin()
+				Login := bufio.NewScanner(os.Stdin)
+				for Login.Scan(){
+					line := Login.Text()
+					if line == "99" {
+						fmt.Println("Logout...")
+						separator()
+						break
+					}
+
+					switch line {
+						case "1":
+							fmt.Println("Lihat Profil")
+							separator()
+						case "2":
+							fmt.Println("Daftar Buku Saya")
+							separator()
+						case "3":
+							fmt.Println("Tambah Buku")
+							separator()
+						case "4":
+							fmt.Println("Update Buku")
+							separator()
+						case "5":
+							fmt.Println("Hapus Buku")
+							separator()
+						case "6":
+							fmt.Println("Pinjam Buku")
+							separator()
+						case "7":
+							fmt.Println("Kembalikan Buku")
+							separator()
+						case "99":
+							fmt.Println("Logout...")
+						default:
+							fmt.Println("Menu Tidak Tersedia")
+					}
+
+					listLogin()
+				}
 			case "3":
 				fmt.Println("Lihat Daftar Buku")
+				separator()
 			case "99":
 				fmt.Println("Exit")
 			default:

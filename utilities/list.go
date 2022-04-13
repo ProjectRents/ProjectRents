@@ -10,3 +10,15 @@ func list() {
 	fmt.Println("99. Exit")
 	fmt.Print("Masukkan 'number' untuk memilih menu : ")
 }
+
+func listLogin() {
+	fmt.Println("Pilihan Menu :")
+	fmt.Println("1. Lihat Profil")
+	fmt.Println("2. Daftar Buku Saya")
+	fmt.Println("3. Tambah Buku")
+	fmt.Println("4. Update Buku")
+	fmt.Println("5. Hapus Buku")
+	fmt.Println("6. Pinjam Buku")
+	fmt.Println("99. Logout")
+	fmt.Print("Masukkan 'number' untuk memilih menu : ")
+}
