@@ -11,15 +11,6 @@ type BookDB struct {
 	DB *gorm.DB
 }
 
-func (b *BookDB) GetAllDataBook() []entities.Book {
-	results := []entities.Book{}
-	if err := b.DB.Find(&results).Error; err != nil {
-		fmt.Println("Terjadi kesalahan saat get data book", err)
-	}
-
-	return results
-}
-
 func (c BookDB) CreateBook(title string, isbn string, author string, id uint) (string) {
 	// Insert data
 	
@@ -37,30 +28,43 @@ func (c BookDB) CreateBook(title string, isbn string, author string, id uint) (s
 	return "BERHASIL MENAMBAH BUKU"
 }
 
-func (c BookDB) UpdateBook(title string, isbn string, author string, id uint) string {
-	// Update data
-	result := c.DB.Save(&entities.Book{
-		UserID: id,
+func (c *BookDB) GetAllDataBook() []entities.Book {
+	// Ambil semua data
+
+	var books []entities.Book
+
+	if err := c.DB.Find(&books).Error; err != nil {
+		fmt.Println("Terjadi kesalahan saat get data book", err)
+	}
+
+	return books
+}
+
+func (c BookDB) EditBook(title, isbn, author string, user_id, book_id uint) (string) {
+	// Edit data
+	
+	trx := c.DB.Where("user_id = ? AND id = ?", user_id, book_id).Model(&entities.Book{}).Updates(entities.Book{
 		Title:  title,
 		Isbn:   isbn,
 		Author: author,
 	})
 
-	if result.Error != nil {
-		return "GAGAL MENGUBAH BUKU"
+	if trx.RowsAffected == 0 {
+		return "GAGAL MENGEDIT BUKU"
 	}
-
-	return "BERHASIL MENGUBAH BUKU"
+	
+	return "BERHASIL MENGUPDATE BUKU"
 }
 
-func (c BookDB) DeleteBook(id uint) (string) {
+func (c BookDB) DeleteBook(user_id, book_id uint) (string) {
 	// Hapus data
 	res := []entities.Book{}
 
-	tx := c.DB.Where("id = ?", id).Delete(&res)
-	if tx.Error != nil {
+	trx := c.DB.Where("user_id = ? AND id = ?", user_id, book_id).Delete(&res)
+	
+	if trx.RowsAffected == 0 {
 		return "GAGAL MENGHAPUS BUKU"
 	}
-	
+
 	return "BERHASIL MENGHAPUS BUKU"
 }

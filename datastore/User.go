@@ -19,8 +19,8 @@ func (c UserDB) CreateUser(name string, email string, password string, alamat st
 		Alamat:   alamat,
 	})
 
-	if result.Error != nil {
-		return "GAGAL MENAMBAHKAN AKUN"
+	if result.RowsAffected == 0 {
+		return "GAGAL MENAMBAH AKUN"
 	}
 
 	return "BERHASIL MENAMBAHKAN AKUN"

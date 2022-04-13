@@ -6,7 +6,6 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
-	"project_apps/entities"
 )
 
 func MenuUtama() {
@@ -15,11 +14,9 @@ func MenuUtama() {
 	db := config.Database(connection)
 
 	// Migrate tables
-	db.AutoMigrate(&entities.User{})
-	db.AutoMigrate(&entities.Book{})
+	// db.AutoMigrate(&entities.User{})
+	// db.AutoMigrate(&entities.Book{})
 	
-	
-
 	if db.Error != nil {
 		fmt.Println(db.Error)
 		return
@@ -50,9 +47,9 @@ func MenuUtama() {
 
 				fmt.Println("MENU LOGIN")
 				separator()
-				id, result := Input.Login(InputLogin())
+				user_id, result := Input.Login(InputLogin())
 
-				if id != 0 {
+				if user_id != 0 {
 					fmt.Println("Selamat datang,", result)
 				} else {
 					fmt.Println(result)
@@ -78,25 +75,30 @@ func MenuUtama() {
 							fmt.Println("Daftar Buku Saya")
 							separator()
 						case "3":
+							// Add Book
+
 							Input := datastore.BookDB{DB: db}
 							separator()
 							fmt.Println("MENAMBAHKAN BUKU BARU")
 							separator()
-							fmt.Println(Input.CreateBook(InputBook(id)))
+							fmt.Println(Input.CreateBook(InputBook(user_id)))
 							separator()
 						case "4":
-							// Input := datastore.BookDB{DB: db}
+							// Edit Book
+
+							Input := datastore.BookDB{DB: db}
 							separator()
 							fmt.Println("MENGUBAH BUKU")
 							separator()
-							// fmt.Println(Input.UpdateBook(ChangeBook(id)))
-							separator()
+							fmt.Println(Input.EditBook(InputUbahBook(user_id)))
 						case "5":
-							// Input := datastore.BookDB{DB: db}
+							// Delete Book
+
+							Input := datastore.BookDB{DB: db}
 							separator()
 							fmt.Println("MENGHAPUS BUKU")
 							separator()
-							// fmt.Println(Input.DeleteBook(id))
+							fmt.Println(Input.DeleteBook(InputIDBook(user_id)))
 							separator()
 						case "6":
 							fmt.Println("Pinjam Buku")
@@ -113,15 +115,19 @@ func MenuUtama() {
 					listLogin()
 				}		
 		case "3":
+			// List Books
+
 			Get := datastore.BookDB{DB: db}
 			results := Get.GetAllDataBook()
-			for _, result := range results {
-				separator()
-				fmt.Println("ID :", result.ID)
-				fmt.Println("Judul :", result.Title)
-				fmt.Println("Pengarang :", result.Author)
-				separator()
-			}
+
+			fmt.Println("DAFTAR BUKU")
+			separator()
+				for _, result := range results {
+					fmt.Println("ID :", result.ID)
+					fmt.Println("Judul :", result.Title)
+					fmt.Println("Pengarang :", result.Author)
+				}
+			separator()
 		case "99":
 			fmt.Println("Exit")
 		default:
