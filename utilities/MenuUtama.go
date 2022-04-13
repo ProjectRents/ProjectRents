@@ -89,7 +89,11 @@ func MenuUtama() {
 					fmt.Println(Input.UpdateBook(ubahBook()))
 					separator()
 				case "5":
-					fmt.Println("Hapus Buku")
+					Input := datastore.BookDB{DB: db}
+
+					fmt.Println("MENHAPUS BUKU")
+					separator()
+					fmt.Println(Input.DeleteBook())
 					separator()
 				case "6":
 					fmt.Println("Pinjam Buku")
