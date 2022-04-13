@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"fmt"
 	"project_apps/entities"
 
 	"gorm.io/gorm"
@@ -10,7 +11,7 @@ type UserDB struct {
 	DB *gorm.DB
 }
 
-func (c UserDB) CreateUser(name string, email string, password string, alamat string) string {
+func (c UserDB) CreateUser(name string, email string, password string, alamat string) {
 	// Insert data
 	result := c.DB.Create(&entities.User{
 		Name:     name,
@@ -20,8 +21,7 @@ func (c UserDB) CreateUser(name string, email string, password string, alamat st
 	})
 
 	if result.Error != nil {
-		return "GAGAL MENAMBAH AKUN"
+		fmt.Println(result.Error)
+		return
 	}
-
-	return "BERHASIL MENAMBAH AKUN"
 }
