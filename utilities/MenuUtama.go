@@ -6,6 +6,7 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
+	"project_apps/entities"
 )
 
 func MenuUtama() {
@@ -14,9 +15,11 @@ func MenuUtama() {
 	db := config.Database(connection)
 
 	// Migrate tables
-	// db.AutoMigrate(&entities.User{})
-	// db.AutoMigrate(&entities.Book{})
-	
+	db.AutoMigrate(&entities.User{})
+	db.AutoMigrate(&entities.Book{})
+	db.AutoMigrate(&entities.Rent{})
+	db.AutoMigrate(&entities.Transaksi{})
+
 	if db.Error != nil {
 		fmt.Println(db.Error)
 		return
@@ -33,159 +36,169 @@ func MenuUtama() {
 		}
 
 		switch line {
-			case "1":
-				// Add Account
-				Input := datastore.UserDB{DB: db}
-				separator()
-				fmt.Println("MENAMBAHKAN AKUN BARU")
-				separator()
-				fmt.Println(Input.CreateUser(InputUser()))
-				separator()
-			case "2":
-				// Login
-				Input := datastore.UserDB{DB: db}
-				separator()
-				fmt.Println("MENU LOGIN")
-				separator()
-				user_id, result := Input.Login(InputLogin())
+		case "1":
+			// Add Account
+			Input := datastore.UserDB{DB: db}
+			separator()
+			fmt.Println("MENAMBAHKAN AKUN BARU")
+			separator()
+			fmt.Println(Input.CreateUser(InputUser()))
+			separator()
+		case "2":
+			// Login
+			Input := datastore.UserDB{DB: db}
+			separator()
+			fmt.Println("MENU LOGIN")
+			separator()
+			user_id, result := Input.Login(InputLogin())
 
-				if user_id != 0 {
-					fmt.Println("Selamat datang,", result)
-				} else {
-					fmt.Println(result)
+			if user_id != 0 {
+				fmt.Println("Selamat datang,", result)
+			} else {
+				fmt.Println(result)
+				break
+			}
+			separator()
+
+			listLogin()
+			Login := bufio.NewScanner(os.Stdin)
+			for Login.Scan() {
+				line := Login.Text()
+				if line == "99" {
+					fmt.Println("Logout...")
+					separator()
 					break
 				}
-				separator()
-				
-				listLogin()
-				Login := bufio.NewScanner(os.Stdin)
-				for Login.Scan(){
-					line := Login.Text()
-					if line == "99" {
-						fmt.Println("Logout...")
-						separator()
-						break
-					}
 
-					switch line {
+				switch line {
+				case "1":
+					// Profile
+					separator()
+					fmt.Println("PROFIL SAYA")
+					separator()
+
+					listUser()
+					User := bufio.NewScanner(os.Stdin)
+					for User.Scan() {
+						line := User.Text()
+						if line == "99" {
+							fmt.Println("Kembali...")
+							separator()
+							break
+						}
+
+						switch line {
 						case "1":
-							// Profile
+							// Get data user
+
+							Get := datastore.UserDB{DB: db}
+							getUser := Get.GetAllDataUser(user_id)
 							separator()
-							fmt.Println("PROFIL SAYA")
-							separator()
+							fmt.Println("DETAIL PROFIL")
 
-							listUser()
-							User := bufio.NewScanner(os.Stdin)
-							for User.Scan(){
-								line := User.Text()
-								if line == "99" {
-									fmt.Println("Kembali...")
-									separator()
-									break
-								}
-
-								switch line {
-									case "1":
-										// Get data user
-										
-										Get := datastore.UserDB{DB: db}
-										getUser := Get.GetAllDataUser(user_id)
-										separator()
-										fmt.Println("DETAIL PROFIL")
-										
-											for _, result := range getUser {
-												separator()
-												fmt.Println("Nama:", result.Name)
-												fmt.Println("Email:", result.Email)
-												fmt.Println("Password:", result.Password)
-												fmt.Println("Alamat:", result.Alamat)
-												separator()
-											}
-									
-									case "2":
-										// Edit Profile
-
-										Input := datastore.UserDB{DB: db}
-										separator()
-										fmt.Println("UBAH PROFIL SAYA")
-
-										fmt.Println(Input.EditUser(InputUbahUser(user_id)))
-										separator()
-
-									case "3":
-										// Delete Profile
-
-										Input := datastore.UserDB{DB: db}
-										separator()
-										fmt.Println("HAPUS AKUN SAYA")
-
-										fmt.Println(Input.DeleteUser(user_id))
-										separator()
-										list()
-										Menu.Scan()
-										
-									default:
-										fmt.Println("Menu Tidak Tersedia")
-								}
-
-								listUser()
+							for _, result := range getUser {
+								separator()
+								fmt.Println("Nama:", result.Name)
+								fmt.Println("Email:", result.Email)
+								fmt.Println("Password:", result.Password)
+								fmt.Println("Alamat:", result.Alamat)
+								separator()
 							}
+
 						case "2":
-							// Get Book
+							// Edit Profile
 
-							Input := datastore.BookDB{DB: db}
+							Input := datastore.UserDB{DB: db}
 							separator()
-							fmt.Println("MENAMPILKAN SEMUA BUKU")
-							
-							DatabyUser := (Input.GetBook(user_id))
-								for _, result := range DatabyUser {
-									separator()
-									fmt.Println("ID :", result.ID)
-									fmt.Println("Judul :", result.Title)
-									fmt.Println("Pengarang :", result.Author)
-									separator()
-								}
+							fmt.Println("UBAH PROFIL SAYA")
+
+							fmt.Println(Input.EditUser(InputUbahUser(user_id)))
+							separator()
+
 						case "3":
-							// Add Book
+							// Delete Profile
 
-							Input := datastore.BookDB{DB: db}
+							Input := datastore.UserDB{DB: db}
 							separator()
-							fmt.Println("MENAMBAHKAN BUKU BARU")
-							separator()
-							fmt.Println(Input.CreateBook(InputBook(user_id)))
-							separator()
-						case "4":
-							// Edit Book
+							fmt.Println("HAPUS AKUN SAYA")
 
-							Input := datastore.BookDB{DB: db}
+							fmt.Println(Input.DeleteUser(user_id))
 							separator()
-							fmt.Println("MENGUBAH BUKU")
-							separator()
-							fmt.Println(Input.EditBook(InputUbahBook(user_id)))
-							separator()
-						case "5":
-							// Delete Book
+							list()
+							Menu.Scan()
 
-							Input := datastore.BookDB{DB: db}
-							separator()
-							fmt.Println("MENGHAPUS BUKU")
-							separator()
-							fmt.Println(Input.DeleteBook(InputIDBook(user_id)))
-							separator()
-						case "6":
-							fmt.Println("Pinjam Buku")
-							separator()
-						case "7":
-							fmt.Println("Kembalikan Buku")
-							separator()
-						case "99":
-							fmt.Println("Logout...")
 						default:
 							fmt.Println("Menu Tidak Tersedia")
-					}
+						}
 
-					listLogin()
-				}		
+						listUser()
+					}
+				case "2":
+					// Get Book
+
+					Input := datastore.BookDB{DB: db}
+					separator()
+					fmt.Println("MENAMPILKAN SEMUA BUKU")
+
+					DatabyUser := (Input.GetBook(user_id))
+					for _, result := range DatabyUser {
+						separator()
+						fmt.Println("ID :", result.ID)
+						fmt.Println("Judul :", result.Title)
+						fmt.Println("Pengarang :", result.Author)
+						separator()
+					}
+				case "3":
+					// Add Book
+
+					Input := datastore.BookDB{DB: db}
+					separator()
+					fmt.Println("MENAMBAHKAN BUKU BARU")
+					separator()
+					fmt.Println(Input.CreateBook(InputBook(user_id)))
+					separator()
+				case "4":
+					// Edit Book
+
+					Input := datastore.BookDB{DB: db}
+					separator()
+					fmt.Println("MENGUBAH BUKU")
+					separator()
+					fmt.Println(Input.EditBook(InputUbahBook(user_id)))
+					separator()
+				case "5":
+					// Delete Book
+
+					Input := datastore.BookDB{DB: db}
+					separator()
+					fmt.Println("MENGHAPUS BUKU")
+					separator()
+					fmt.Println(Input.DeleteBook(InputIDBook(user_id)))
+					separator()
+				case "6":
+					// Add Book
+
+					Input := datastore.RentDB{DB: db}
+					separator()
+					fmt.Println("MEMINJAM BUKU")
+					separator()
+					fmt.Println(Input.CreateRent(InputRent(user_id)))
+					separator()
+				case "7":
+					Input := datastore.RentDB{DB: db}
+					separator()
+					fmt.Println("MEMULANGKAN BUKU")
+					separator()
+					fmt.Println(Input.ReturnRent(InputIDBook(user_id)))
+					separator()
+				case "99":
+					fmt.Println("Logout...")
+				default:
+					fmt.Println("Menu Tidak Tersedia")
+				}
+
+				listLogin()
+			}
 		case "3":
 			// List Books
 
@@ -193,15 +206,15 @@ func MenuUtama() {
 			getAll := Get.GetAllDataBook()
 			separator()
 			fmt.Println("DAFTAR BUKU")
-			
-				for _, result := range getAll {
-					separator()
-					fmt.Println("ID :", result.ID)
-					fmt.Println("Judul :", result.Title)
-					fmt.Println("Pengarang :", result.Author)
-					separator()
-				}
-			
+
+			for _, result := range getAll {
+				separator()
+				fmt.Println("ID :", result.ID)
+				fmt.Println("Judul :", result.Title)
+				fmt.Println("Pengarang :", result.Author)
+				separator()
+			}
+
 		case "99":
 			fmt.Println("Exit")
 		default:
