@@ -23,3 +23,13 @@ func listLogin() {
 	fmt.Println("99. Logout")
 	fmt.Print("Masukkan 'number' untuk memilih menu : ")
 }
+
+func listUser() {
+	fmt.Println("Pilihan Menu :")
+	fmt.Println("1. Lihat Profil")
+	fmt.Println("2. Update Profil")
+	fmt.Println("3. Delete Account")
+	fmt.Println("99. Kembali")
+	fmt.Print("Masukkan 'number' untuk memilih menu : ")
+}
+

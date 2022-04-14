@@ -69,8 +69,67 @@ func MenuUtama() {
 
 					switch line {
 						case "1":
-							fmt.Println("Lihat Profil")
+							// Profile
 							separator()
+							fmt.Println("PROFIL SAYA")
+							separator()
+
+							listUser()
+							User := bufio.NewScanner(os.Stdin)
+							for User.Scan(){
+								line := User.Text()
+								if line == "99" {
+									fmt.Println("Kembali...")
+									separator()
+									break
+								}
+
+								switch line {
+									case "1":
+										// Get data user
+										
+										Get := datastore.UserDB{DB: db}
+										getUser := Get.GetAllDataUser(user_id)
+										separator()
+										fmt.Println("DETAIL PROFIL")
+										
+											for _, result := range getUser {
+												separator()
+												fmt.Println("Nama:", result.Name)
+												fmt.Println("Email:", result.Email)
+												fmt.Println("Password:", result.Password)
+												fmt.Println("Alamat:", result.Alamat)
+												separator()
+											}
+									
+									case "2":
+										// Edit Profile
+
+										Input := datastore.UserDB{DB: db}
+										separator()
+										fmt.Println("UBAH PROFIL SAYA")
+
+										fmt.Println(Input.EditUser(InputUbahUser(user_id)))
+										separator()
+
+									case "3":
+										// Delete Profile
+
+										Input := datastore.UserDB{DB: db}
+										separator()
+										fmt.Println("HAPUS AKUN SAYA")
+
+										fmt.Println(Input.DeleteUser(user_id))
+										separator()
+										list()
+										Menu.Scan()
+										
+									default:
+										fmt.Println("Menu Tidak Tersedia")
+								}
+
+								listUser()
+							}
 						case "2":
 							// Get Book
 
@@ -134,13 +193,15 @@ func MenuUtama() {
 			getAll := Get.GetAllDataBook()
 			separator()
 			fmt.Println("DAFTAR BUKU")
-			separator()
+			
 				for _, result := range getAll {
+					separator()
 					fmt.Println("ID :", result.ID)
 					fmt.Println("Judul :", result.Title)
 					fmt.Println("Pengarang :", result.Author)
+					separator()
 				}
-			separator()
+			
 		case "99":
 			fmt.Println("Exit")
 		default:
