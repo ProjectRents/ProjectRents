@@ -7,6 +7,9 @@ import (
 	"project_apps/config"
 	"project_apps/datastore"
 	"project_apps/entities"
+	utilities_book "project_apps/utilities/book"
+	utilities_rent "project_apps/utilities/rent"
+	utilities_user "project_apps/utilities/user"
 )
 
 func MenuUtama() {
@@ -18,7 +21,6 @@ func MenuUtama() {
 	db.AutoMigrate(&entities.User{})
 	db.AutoMigrate(&entities.Book{})
 	db.AutoMigrate(&entities.Rent{})
-	db.AutoMigrate(&entities.Transaksi{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -42,7 +44,7 @@ func MenuUtama() {
 			separator()
 			fmt.Println("MENAMBAHKAN AKUN BARU")
 			separator()
-			fmt.Println(Input.CreateUser(InputUser()))
+			fmt.Println(Input.CreateUser(utilities_user.InputUser()))
 			separator()
 		case "2":
 			// Login
@@ -50,7 +52,7 @@ func MenuUtama() {
 			separator()
 			fmt.Println("MENU LOGIN")
 			separator()
-			user_id, result := Input.Login(InputLogin())
+			user_id, result := Input.Login(utilities_user.InputLogin())
 
 			if user_id != 0 {
 				fmt.Println("Selamat datang,", result)
@@ -112,7 +114,7 @@ func MenuUtama() {
 							separator()
 							fmt.Println("UBAH PROFIL SAYA")
 
-							fmt.Println(Input.EditUser(InputUbahUser(user_id)))
+							fmt.Println(Input.EditUser(utilities_user.InputUbahUser(user_id)))
 							separator()
 
 						case "3":
@@ -155,7 +157,7 @@ func MenuUtama() {
 					separator()
 					fmt.Println("MENAMBAHKAN BUKU BARU")
 					separator()
-					fmt.Println(Input.CreateBook(InputBook(user_id)))
+					fmt.Println(Input.CreateBook(utilities_book.InputBook(user_id)))
 					separator()
 				case "4":
 					// Edit Book
@@ -164,7 +166,7 @@ func MenuUtama() {
 					separator()
 					fmt.Println("MENGUBAH BUKU")
 					separator()
-					fmt.Println(Input.EditBook(InputUbahBook(user_id)))
+					fmt.Println(Input.EditBook(utilities_book.InputUbahBook(user_id)))
 					separator()
 				case "5":
 					// Delete Book
@@ -173,7 +175,7 @@ func MenuUtama() {
 					separator()
 					fmt.Println("MENGHAPUS BUKU")
 					separator()
-					fmt.Println(Input.DeleteBook(InputIDBook(user_id)))
+					fmt.Println(Input.DeleteBook(utilities_book.InputIDBook(user_id)))
 					separator()
 				case "6":
 					// Add Book
@@ -182,14 +184,14 @@ func MenuUtama() {
 					separator()
 					fmt.Println("MEMINJAM BUKU")
 					separator()
-					fmt.Println(Input.CreateRent(InputRent(user_id)))
+					fmt.Println(Input.CreateRent(utilities_rent.InputRent(user_id)))
 					separator()
 				case "7":
 					Input := datastore.RentDB{DB: db}
 					separator()
 					fmt.Println("MEMULANGKAN BUKU")
 					separator()
-					fmt.Println(Input.ReturnRent(InputIDBook(user_id)))
+					fmt.Println(Input.ReturnRent(utilities_book.InputIDBook(user_id)))
 					separator()
 				case "99":
 					fmt.Println("Logout...")

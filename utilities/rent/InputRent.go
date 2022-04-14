@@ -1,4 +1,4 @@
-package utilities
+package utilities_rent
 
 import (
 	"bufio"

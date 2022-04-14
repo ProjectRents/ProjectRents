@@ -1,4 +1,4 @@
-package utilities
+package utilities_user
 
 import (
 	"bufio"
@@ -6,21 +6,18 @@ import (
 	"os"
 )
 
-func InputUbahUser(user uint) (name, email, password, alamat string, user_id uint) {
-
-	user_id = user
-
-	fmt.Print("Masukkan nama: ")
+func InputUser() (name, email, password, alamat string) {
+	fmt.Print("Masukkan nama user: ")
 	Name := bufio.NewScanner(os.Stdin)
 	Name.Scan()
 	name = Name.Text()
 
-	fmt.Print("Masukkan email: ")
+	fmt.Print("Masukkan email user: ")
 	Email := bufio.NewScanner(os.Stdin)
 	Email.Scan()
 	email = Email.Text()
 
-	fmt.Print("Masukkan password: ")
+	fmt.Print("Masukkan password user: ")
 	Password := bufio.NewScanner(os.Stdin)
 	Password.Scan()
 	password = Password.Text()
@@ -29,6 +26,6 @@ func InputUbahUser(user uint) (name, email, password, alamat string, user_id uin
 	Alamat := bufio.NewScanner(os.Stdin)
 	Alamat.Scan()
 	alamat = Alamat.Text()
-	
+
 	return
 }
