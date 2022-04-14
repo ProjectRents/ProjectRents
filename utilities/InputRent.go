@@ -6,21 +6,16 @@ import (
 	"os"
 )
 
-func InputRent() (UserID, BookID, Return_date string) {
-	fmt.Print("Masukkan User: ")
-	UserID := bufio.NewScanner(os.Stdin)
-	UserID.Scan()
-	userID = UserID.Text()
+func InputRent(u uint) (user_id, book_id uint, tanggal_kembali string) {
+	// Input data
+	user_id = u
+	fmt.Print("Masukkan ID buku yang mau pinjam: ")
+	fmt.Scanln(&book_id)
 
-	fmt.Print("Masukkan Buku yang mau dipinjam: ")
-	BookID := bufio.NewScanner(os.Stdin)
-	BookID.Scan()
-	bookID = BookID.Text()
-
-	fmt.Print("Tanggal Pengembalian: ")
-	Return_date := bufio.NewScanner(os.Stdin)
-	Return_date.Scan()
-	return_date = Return_date.Text()
+	fmt.Print("Tanggal Kembali: ")
+	Kalender := bufio.NewScanner(os.Stdin)
+	Kalender.Scan()
+	tanggal_kembali = Kalender.Text()
 
 	return
 }
