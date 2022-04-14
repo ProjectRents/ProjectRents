@@ -10,13 +10,13 @@ type RentDB struct {
 	DB *gorm.DB
 }
 
-func (c RentDB) CreateRent() string {
+func (c RentDB) CreateRent(user_id, book_id uint, Return_date string) string {
 	// Insert data
 
-	result := c.DB.Save(&entities.Rent{
-		UserID:      1,
-		BookID:      1,
-		Return_date: "2022-10-10",
+	result := c.DB.Create(&entities.Rent{
+		UserID:      user_id,
+		BookID:      book_id,
+		Return_date: Return_date,
 	})
 
 	if result.Error != nil {
@@ -26,16 +26,13 @@ func (c RentDB) CreateRent() string {
 	return "BERHASIL MEMINJAM BUKU"
 }
 
-func (c RentDB) ReturnRent() string {
-	// Insert data
+func (c RentDB) ReturnRent(user_id, book_id uint) string {
+	// Hapus data
+	res := []entities.Rent{}
 
-	result := c.DB.Create(&entities.Rent{
-		UserID:      1,
-		BookID:      2,
-		Return_date: "2022-11-11",
-	})
+	trx := c.DB.Where("user_id = ? AND book_id = ?", user_id, book_id).Delete(&res)
 
-	if result.Error != nil {
+	if trx.RowsAffected == 0 {
 		return "GAGAL MENGEMBALIKAN BUKU"
 	}
 
