@@ -28,6 +28,19 @@ func (c BookDB) CreateBook(title string, isbn string, author string, id uint) (s
 	return "BERHASIL MENAMBAH BUKU"
 }
 
+func (c BookDB) GetBook(user_id uint) ([]entities.Book) {
+	// Get data
+	res := []entities.Book{}
+
+	err := c.DB.Where("user_id = ?", user_id).Find(&res).Error
+
+	if err != nil {
+		return nil
+	}
+
+	return res
+}
+
 func (c *BookDB) GetAllDataBook() []entities.Book {
 	// Ambil semua data
 

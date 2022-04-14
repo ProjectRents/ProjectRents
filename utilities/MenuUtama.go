@@ -44,7 +44,7 @@ func MenuUtama() {
 			case "2":
 				// Login
 				Input := datastore.UserDB{DB: db}
-
+				separator()
 				fmt.Println("MENU LOGIN")
 				separator()
 				user_id, result := Input.Login(InputLogin())
@@ -72,8 +72,20 @@ func MenuUtama() {
 							fmt.Println("Lihat Profil")
 							separator()
 						case "2":
-							fmt.Println("Daftar Buku Saya")
+							// Get Book
+
+							Input := datastore.BookDB{DB: db}
 							separator()
+							fmt.Println("MENAMPILKAN SEMUA BUKU")
+							
+							DatabyUser := (Input.GetBook(user_id))
+								for _, result := range DatabyUser {
+									separator()
+									fmt.Println("ID :", result.ID)
+									fmt.Println("Judul :", result.Title)
+									fmt.Println("Pengarang :", result.Author)
+									separator()
+								}
 						case "3":
 							// Add Book
 
@@ -91,6 +103,7 @@ func MenuUtama() {
 							fmt.Println("MENGUBAH BUKU")
 							separator()
 							fmt.Println(Input.EditBook(InputUbahBook(user_id)))
+							separator()
 						case "5":
 							// Delete Book
 
@@ -118,11 +131,11 @@ func MenuUtama() {
 			// List Books
 
 			Get := datastore.BookDB{DB: db}
-			results := Get.GetAllDataBook()
-
+			getAll := Get.GetAllDataBook()
+			separator()
 			fmt.Println("DAFTAR BUKU")
 			separator()
-				for _, result := range results {
+				for _, result := range getAll {
 					fmt.Println("ID :", result.ID)
 					fmt.Println("Judul :", result.Title)
 					fmt.Println("Pengarang :", result.Author)
