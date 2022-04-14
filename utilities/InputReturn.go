@@ -1,26 +1,15 @@
 package utilities
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 )
 
-func InputReturn() (UserID, BookID, Return_date string) {
-	fmt.Print("Masukkan User: ")
-	UserID := bufio.NewScanner(os.Stdin)
-	UserID.Scan()
-	userID = UserID.Text()
+func InputReturn(user uint) (user_id, book_id uint) {
+	// Input data
+	user_id = user
 
-	fmt.Print("Masukkan Buku yang mau dikembalikan: ")
-	BookID := bufio.NewScanner(os.Stdin)
-	BookID.Scan()
-	bookID = BookID.Text()
-
-	fmt.Print("Tanggal masuk: ")
-	Return_date := bufio.NewScanner(os.Stdin)
-	Return_date.Scan()
-	return_date = Return_date.Text()
+	fmt.Print("Masukkan ID Buku: ")
+	fmt.Scanln(&book_id)
 
 	return
 }
