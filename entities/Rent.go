@@ -1,10 +1,12 @@
 package entities
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Rent struct {
 	gorm.Model
 	UserID      uint
-	BookID      uint
+	BookID      uint `gorm:"primarykey"`
 	Return_date string
 }
