@@ -185,7 +185,32 @@ func MenuUtama() {
 					separator()
 					fmt.Println(Input.CreateRent(utilities_rent.InputRent(user_id)))
 					separator()
+
 				case "7":
+					// Get Rent
+
+					Input := datastore.RentDB{DB: db}
+					Output := datastore.BookDB{DB: db}
+					separator()
+					fmt.Println("MENAMPILKAN SEMUA PEMINJAMAN")
+					
+					RentbyUser := (Input.GetRent(user_id))
+					for _, result := range RentbyUser {
+						separator()
+						fmt.Println("ID :", result.ID)
+						fmt.Println("Tanggal Kembali :", result.Return_date)
+							DatabyUser := (Output.GetBook(user_id))
+							for _, result := range DatabyUser {
+								fmt.Println("\tID Buku :", result.ID)
+								fmt.Println("\tJudul :", result.Title)
+								fmt.Println("\tPengarang :", result.Author)
+							}
+						separator()
+					}
+
+				case "8":
+					// Delete Rent
+
 					Input := datastore.RentDB{DB: db}
 					separator()
 					fmt.Println("MEMULANGKAN BUKU")

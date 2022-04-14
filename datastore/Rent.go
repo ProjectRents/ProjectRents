@@ -47,3 +47,12 @@ func (c RentDB) ReturnRent(user_id, book_id uint) string {
 
 	return "BERHASIL MENGEMBALIKAN BUKU"
 }
+
+func (c RentDB) GetRent(user_id uint) []entities.Rent {
+	// Get data
+	rents := []entities.Rent{}
+
+	c.DB.Where("user_id = ?", user_id).Find(&rents)
+
+	return rents
+}
