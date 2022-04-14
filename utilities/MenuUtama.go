@@ -6,7 +6,6 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
-	"project_apps/entities"
 	utilities_book "project_apps/utilities/book"
 	utilities_rent "project_apps/utilities/rent"
 	utilities_user "project_apps/utilities/user"
@@ -18,9 +17,9 @@ func MenuUtama() {
 	db := config.Database(connection)
 
 	// Migrate tables
-	db.AutoMigrate(&entities.User{})
-	db.AutoMigrate(&entities.Book{})
-	db.AutoMigrate(&entities.Rent{})
+	// db.AutoMigrate(&entities.User{})
+	// db.AutoMigrate(&entities.Book{})
+	// db.AutoMigrate(&entities.Rent{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)

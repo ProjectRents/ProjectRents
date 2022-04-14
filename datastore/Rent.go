@@ -14,7 +14,7 @@ func (c RentDB) CreateRent(user_id, book_id uint, Return_date string) string {
 	// Insert data
 
 	rents := []entities.Rent{}
-	c.DB.Where("book_id = ?", book_id).First(&rents)
+	c.DB.Where("book_id = ?", book_id).Find(&rents)
 
 	for _, rent := range rents {
 		if rent.BookID != book_id {
