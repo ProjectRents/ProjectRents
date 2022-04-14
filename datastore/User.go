@@ -1,7 +1,6 @@
 package datastore
 
 import (
-	"fmt"
 	"project_apps/entities"
 
 	"gorm.io/gorm"
@@ -46,14 +45,15 @@ func (c UserDB) Login(email string, password string) (uint, string) {
 	return id, name
 }
 
-func (b *UserDB) GetAllDataUser() ([]entities.User, error) {
+func (c UserDB) GetUser(id uint) []entities.User {
+	// Get data
 	res := []entities.User{}
 
-	if err := b.DB.Find(&res).Error; err != nil {
-		fmt.Println("Terjadi kesalahan saat get data book", err)
-		return []entities.User{}, err
+	err := c.DB.Where("id = ?", id).Find(&res).Error
+
+	if err != nil {
+		return nil
 	}
 
-	return res, nil
-
+	return res
 }
