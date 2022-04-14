@@ -23,7 +23,8 @@ func (c *UserDB) GetAllDataUser(user_id uint) ([]entities.User) {
 	return res
 }
 
-func (c UserDB) CreateUser(name string, email string, password string, alamat string) (string) {
+func (c UserDB) CreateUser(name string, email string, password string, alamat string) string {
+
 	// Insert data
 	result := c.DB.Create(&entities.User{
 		Name:     name,
@@ -47,14 +48,14 @@ func (c UserDB) Login(email string, password string) (uint, string) {
 	if result.Error != nil {
 		return 0, "Email atau Password Salah"
 	}
-	
+
 	var name string
 	var id uint
 	for _, user := range results {
 		id = user.ID
 		name = user.Name
 	}
-	
+
 	return id, name
 }
 

@@ -13,7 +13,7 @@ func list() {
 
 func listLogin() {
 	fmt.Println("Pilihan Menu :")
-	fmt.Println("1. Lihat Profil")
+	fmt.Println("1. Profile")
 	fmt.Println("2. Daftar Buku Saya")
 	fmt.Println("3. Tambah Buku")
 	fmt.Println("4. Update Buku")
@@ -26,8 +26,8 @@ func listLogin() {
 
 func listUser() {
 	fmt.Println("Pilihan Menu :")
-	fmt.Println("1. Lihat Profil")
-	fmt.Println("2. Update Profil")
+	fmt.Println("1. Lihat Profile")
+	fmt.Println("2. Update Profile")
 	fmt.Println("3. Delete Account")
 	fmt.Println("99. Kembali")
 	fmt.Print("Masukkan 'number' untuk memilih menu : ")
