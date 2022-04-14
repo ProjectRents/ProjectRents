@@ -10,12 +10,13 @@ type RentDB struct {
 	DB *gorm.DB
 }
 
-func (c RentDB) CreateBook(Return_date string) string {
+func (c RentDB) CreateRent() string {
 	// Insert data
 
-	result := c.DB.Create(&entities.Rent{
-
-		Return_date: Return_date,
+	result := c.DB.Save(&entities.Rent{
+		UserID:      1,
+		BookID:      1,
+		Return_date: "2022-10-10",
 	})
 
 	if result.Error != nil {
@@ -25,12 +26,13 @@ func (c RentDB) CreateBook(Return_date string) string {
 	return "BERHASIL MEMINJAM BUKU"
 }
 
-func (c RentDB) ReturnBook(Return_date string) string {
+func (c RentDB) ReturnRent() string {
 	// Insert data
 
 	result := c.DB.Create(&entities.Rent{
-
-		Return_date: Return_date,
+		UserID:      1,
+		BookID:      2,
+		Return_date: "2022-11-11",
 	})
 
 	if result.Error != nil {
