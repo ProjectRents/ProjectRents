@@ -1,5 +1,10 @@
 package entities
 
+import "gorm.io/gorm"
+
 type Rent struct {
-	Return_date string `gorm:"type:date;not null"`
+	gorm.Model
+	UserID      uint
+	BookID      uint
+	Return_date string
 }
