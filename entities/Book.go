@@ -4,8 +4,9 @@ import "gorm.io/gorm"
 
 type Book struct {
 	gorm.Model
-	UserID uint 
+	UserID uint
 	Title  string `gorm:"type:varchar(50);not null"`
 	Isbn   string `gorm:"type:varchar(50);not null"`
 	Author string `gorm:"type:varchar(50);not null"`
+	Rents  []Rent
 }
