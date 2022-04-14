@@ -13,16 +13,25 @@ type RentDB struct {
 func (c RentDB) CreateRent(user_id, book_id uint, Return_date string) string {
 	// Insert data
 
-	result := c.DB.Create(&entities.Rent{
-		UserID:      user_id,
-		BookID:      book_id,
-		Return_date: Return_date,
-	})
+	rents := []entities.Rent{}
+	c.DB.Where("book_id = ?", book_id).First(&rents)
 
-	if result.Error != nil {
-		return "GAGAL MEMINJAM BUKU"
+	for _, rent := range rents {
+		if rent.BookID != book_id {
+			result := c.DB.Create(&entities.Rent{
+				UserID:      user_id,
+				BookID:      book_id,
+				Return_date: Return_date,
+			})
+	
+			if result.Error != nil {
+				return "GAGAL MEMINJAM BUKU"
+			}
+		} else {
+			return "BUKU SUDAH DI PINJAM"
+		}
 	}
-
+	
 	return "BERHASIL MEMINJAM BUKU"
 }
 
