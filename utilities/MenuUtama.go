@@ -18,7 +18,6 @@ func MenuUtama() {
 	db.AutoMigrate(&entities.User{})
 	db.AutoMigrate(&entities.Book{})
 	db.AutoMigrate(&entities.Rent{})
-	db.AutoMigrate(&entities.Transaksi{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
