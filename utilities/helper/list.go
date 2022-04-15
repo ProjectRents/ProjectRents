@@ -1,8 +1,9 @@
-package utilities
+package helper
 
 import "fmt"
 
-func list() {
+func List() {
+	Separator()
 	fmt.Println("Pilihan Menu :")
 	fmt.Println("1. Register Account")
 	fmt.Println("2. Login Account")
@@ -11,7 +12,8 @@ func list() {
 	fmt.Print("Masukkan 'number' untuk memilih menu : ")
 }
 
-func listLogin() {
+func ListLogin() {
+	Separator()
 	fmt.Println("Pilihan Menu :")
 	fmt.Println("1. Profile")
 	fmt.Println("2. Daftar Buku Saya")
@@ -25,7 +27,8 @@ func listLogin() {
 	fmt.Print("Masukkan 'number' untuk memilih menu : ")
 }
 
-func listUser() {
+func ListUser() {
+	Separator()
 	fmt.Println("Pilihan Menu :")
 	fmt.Println("1. Lihat Profile")
 	fmt.Println("2. Update Profile")

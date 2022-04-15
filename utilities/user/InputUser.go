@@ -1,4 +1,4 @@
-package utilities_user
+package user
 
 import (
 	"bufio"

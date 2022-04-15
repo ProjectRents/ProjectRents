@@ -1,20 +1,13 @@
 package datastore
 
 import (
-	"fmt"
 	"project_apps/entities"
-
-	"gorm.io/gorm"
 )
 
-type BookDB struct {
-	DB *gorm.DB
-}
-
-func (c BookDB) CreateBook(title string, isbn string, author string, id uint) (string) {
+func (connect *DatabaseDB) CreateBook(title string, isbn string, author string, id uint) (string) {
 	// Insert data
 	
-	result := c.DB.Create(&entities.Book{
+	result := connect.DB.Create(&entities.Book{
 		UserID: id,
 		Title:  title,
 		Isbn:   isbn,
@@ -22,62 +15,66 @@ func (c BookDB) CreateBook(title string, isbn string, author string, id uint) (s
 	})
 
 	if result.Error != nil {
-		return "GAGAL MENAMBAH BUKU"
+		return "FAILED, PLEASE TRY AGAIN"
 	}
 
-	return "BERHASIL MENAMBAH BUKU"
+	return "SUCCESS, BOOK ADDED"
 }
 
-func (c BookDB) GetBook(user_id uint) ([]entities.Book) {
+func (connect *DatabaseDB) GetBook(user_id uint) ([]entities.Book, string) {
 	// Get data
-	res := []entities.Book{}
+	search := []entities.Book{}
+	connect.DB.Where("user_id = ?", user_id).Find(&search)
 
-	err := c.DB.Where("user_id = ?", user_id).Find(&res).Error
-
-	if err != nil {
-		return nil
+	if len(search) == 0 {
+		return nil, "FAILED, BOOKS NOT FOUND"
 	}
 
-	return res
+	return search, "SUCCESS, DATA DITAMPILKAN"
 }
 
-func (c *BookDB) GetAllDataBook() []entities.Book {
+func (connect DatabaseDB) GetAllDataBook() ([]entities.Book, string) {
 	// Ambil semua data
 
 	var books []entities.Book
+	connect.DB.Find(&books)
 
-	if err := c.DB.Find(&books).Error; err != nil {
-		fmt.Println("Terjadi kesalahan saat get data book", err)
+	if len(books) == 0 {
+		return nil, "FAILED, BOOKS NOT FOUND"
 	}
 
-	return books
+	return books, "SUCCESS, DATA DITAMPILKAN"
 }
 
-func (c BookDB) EditBook(title, isbn, author string, user_id, book_id uint) (string) {
+func (connect DatabaseDB) EditBook(title, isbn, author string, user_id, book_id uint) (string) {
 	// Edit data
-	
-	trx := c.DB.Where("user_id = ? AND id = ?", user_id, book_id).Model(&entities.Book{}).Updates(entities.Book{
-		Title:  title,
-		Isbn:   isbn,
-		Author: author,
-	})
 
-	if trx.RowsAffected == 0 {
-		return "GAGAL MENGEDIT BUKU"
+	if title != "" || isbn != "" || author != ""  {
+		result := connect.DB.Where("user_id = ? AND id = ?", user_id, book_id).Updates(entities.Book{
+			Title:  title,
+			Isbn:   isbn,
+			Author: author,
+		})
+
+		if result.RowsAffected == 0 {
+			return "FAILED, PLEASE TRY AGAIN"
+		}
+	} else {
+		return "NOTHING TO EDIT"
 	}
-	
-	return "BERHASIL MENGUPDATE BUKU"
+
+	return "SUCCESS UPDATE BOOK"
 }
 
-func (c BookDB) DeleteBook(user_id, book_id uint) (string) {
+func (connect DatabaseDB) DeleteBook(user_id, book_id uint) (string) {
 	// Hapus data
-	res := []entities.Book{}
 
-	trx := c.DB.Where("user_id = ? AND id = ?", user_id, book_id).Delete(&res)
+	search := entities.Book{}
+	result := connect.DB.Where("user_id = ? AND id = ?", user_id, book_id).Delete(&search)
 	
-	if trx.RowsAffected == 0 {
-		return "GAGAL MENGHAPUS BUKU"
+	if result.RowsAffected == 0 {
+		return "FAILED, DELETE BOOK"
 	}
 
-	return "BERHASIL MENGHAPUS BUKU"
+	return "SUCCESS, DELETE BOOK"
 }

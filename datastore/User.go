@@ -2,89 +2,92 @@ package datastore
 
 import (
 	"project_apps/entities"
-
-	"gorm.io/gorm"
+	"strings"
 )
 
-type UserDB struct {
-	DB *gorm.DB
-}
-
-func (c *UserDB) GetAllDataUser(user_id uint) ([]entities.User) {
+func (connect *DatabaseDB) GetAllDataUser(user_id uint) ([]entities.User) {
 	// Get data
-	res := []entities.User{}
 
-	err := c.DB.Where("id = ?", user_id).Find(&res).Error
+	users := []entities.User{}
+	connect.DB.Where("id = ?", user_id).Find(&users)
 
-	if err != nil {
-		return nil
-	}
-
-	return res
+	return users
 }
 
-func (c UserDB) CreateUser(name string, email string, password string, alamat string) string {
-
+func (connect DatabaseDB) CreateUser(name string, email string, password string, alamat string) string {
 	// Insert data
-	result := c.DB.Create(&entities.User{
-		Name:     name,
-		Email:    email,
-		Password: password,
-		Alamat:   alamat,
-	})
 
-	if result.RowsAffected == 0 {
-		return "GAGAL MENAMBAH AKUN"
+	search := entities.User{}
+	connect.DB.Where("email = ?", email).Find(&search)
+	
+	if search.Email == email {
+		return "EMAIL ALREADY EXIST, PLEASE CHANGE EMAIL"
+	} else {
+		result := connect.DB.Create(&entities.User{
+			Name:    name,
+			Email:   email,
+			Password: password,
+			Alamat:   alamat,
+		})
+
+		if result.RowsAffected == 0 {
+			return "FAILED, PLEASE REGISTER AGAIN"
+		}
 	}
 
-	return "BERHASIL MENAMBAHKAN AKUN"
+	return "SUCCESS REGISTER, PLEASE LOGIN!"
 }
 
-func (c UserDB) Login(email string, password string) (uint, string) {
+func (connect DatabaseDB) Login(email string, password string) (uint, string) {
 	// Login
-	results := []entities.User{}
-	result := c.DB.Model(&entities.User{}).Where("email = ? AND password = ?", email, password).First(&results)
+	
+	search := entities.User{}
+	connect.DB.Where("email = ? AND password = ?", email, password).Find(&search)
 
-	if result.Error != nil {
-		return 0, "Email atau Password Salah"
+	if search.Email != email || search.Password != password {
+		return 0, "FAILED, EMAIL OR PASSWORD IS WRONG"
 	}
 
-	var name string
-	var id uint
-	for _, user := range results {
-		id = user.ID
-		name = user.Name
-	}
-
-	return id, name
+	name := "HELLO, " + strings.ToUpper(search.Name)
+	return search.ID, name
 }
 
-func (c UserDB) EditUser(name, email, password, alamat string, user_id uint) (string) {
+func (connect DatabaseDB) EditUser(name, email, password, alamat string, user_id uint) (string) {
 	// Edit data
-	
-	trx := c.DB.Where("id = ?", user_id).Model(&entities.User{}).Updates(entities.User{
-		Name:    name,
-		Email:   email,
-		Password: password,
-		Alamat:   alamat,
-	})
 
-	if trx.RowsAffected == 0 {
-		return "GAGAL MENGEDIT USER"
-	}
+	if name != "" || email != "" || password != "" || alamat != "" {
+		search := entities.User{}
+		connect.DB.Where("email = ?", email).Find(&search)
+
+		if search.Email != email {
+			result := connect.DB.Where("id = ?", user_id).Updates(entities.User{
+				Name:    name,
+				Email:   email,
+				Password: password,
+				Alamat:   alamat,
+			})
 	
-	return "BERHASIL MENGUPDATE USER"
+			if result.RowsAffected == 0 {
+				return "FAILED, PLEASE TRY AGAIN"
+			}
+		} else {
+			return "EMAIL ALREADY EXIST, PLEASE CHANGE EMAIL"
+		}
+	} else {
+		return "NOTHING TO EDIT"
+	}
+
+	return "SUCCESS UPDATE USER"
 }
 
-func (c UserDB) DeleteUser(user_id uint) (string) {
+func (connect DatabaseDB) DeleteUser(user_id uint) (string) {
 	// Hapus data
-	res := []entities.User{}
-
-	trx := c.DB.Where("id = ?", user_id).Delete(&res)
+	search := entities.User{}
+	result := connect.DB.Where("id = ?", user_id).Delete(&search)
 	
-	if trx.RowsAffected == 0 {
-		return "GAGAL MENGHAPUS USER"
+	if result.RowsAffected == 0 {
+		return "FAILED, PLEASE TRY AGAIN"
 	}
 
-	return "BERHASIL MENGHAPUS USER"
+	return "SUCCESS DELETE USER"
 }

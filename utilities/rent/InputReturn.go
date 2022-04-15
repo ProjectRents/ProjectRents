@@ -1,4 +1,4 @@
-package utilities_rent
+package rent
 
 import (
 	"fmt"

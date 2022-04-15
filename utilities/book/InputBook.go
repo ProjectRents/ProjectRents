@@ -1,4 +1,4 @@
-package utilities_book
+package book
 
 import (
 	"bufio"

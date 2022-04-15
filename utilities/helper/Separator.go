@@ -1,7 +1,7 @@
-package utilities
+package helper
 
 import "fmt"
 
-func separator() {
+func Separator() {
 	fmt.Println("===========================================")
 }

@@ -6,9 +6,11 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
-	utilities_book "project_apps/utilities/book"
-	utilities_rent "project_apps/utilities/rent"
-	utilities_user "project_apps/utilities/user"
+	"project_apps/entities"
+	"project_apps/utilities/book"
+	"project_apps/utilities/helper"
+	"project_apps/utilities/rent"
+	"project_apps/utilities/user"
 )
 
 func MenuUtama() {
@@ -16,10 +18,11 @@ func MenuUtama() {
 	connection := config.ReadEnv()
 	db := config.Database(connection)
 
+	// Get Akses
+	Akses := datastore.DatabaseDB{DB: db}
+	
 	// Migrate tables
-	// db.AutoMigrate(&entities.User{})
-	// db.AutoMigrate(&entities.Book{})
-	// db.AutoMigrate(&entities.Rent{})
+	db.AutoMigrate(&entities.User{}, &entities.Book{}, &entities.Rent{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -27,228 +30,184 @@ func MenuUtama() {
 	}
 
 	// Menu
-	list()
+	helper.List()
 	Menu := bufio.NewScanner(os.Stdin)
 	for Menu.Scan() {
 		line := Menu.Text()
-		if line == "99" {
-			fmt.Println("Quitting...")
+		if line== "99" {
+			helper.SetTitleMenu(line)
 			break
 		}
 
 		switch line {
 		case "1":
 			// Add Account
-			Input := datastore.UserDB{DB: db}
-			separator()
-			fmt.Println("MENAMBAHKAN AKUN BARU")
-			separator()
-			fmt.Println(Input.CreateUser(utilities_user.InputUser()))
-			separator()
+			
+			helper.SetTitleMenu(line)
+			status := Akses.CreateUser(user.InputUser())
+			helper.SetStatus(status)
 		case "2":
 			// Login
-			Input := datastore.UserDB{DB: db}
-			separator()
-			fmt.Println("MENU LOGIN")
-			separator()
-			user_id, result := Input.Login(utilities_user.InputLogin())
+			
+			helper.SetTitleMenu(line)
+			user_id, name := Akses.Login(user.InputLogin())
 
 			if user_id != 0 {
-				fmt.Println("Selamat datang,", result)
+				helper.SetStatus(name)
 			} else {
-				fmt.Println(result)
+				helper.SetStatus(name)
 				break
 			}
-			separator()
 
-			listLogin()
+			helper.ListLogin()
 			Login := bufio.NewScanner(os.Stdin)
 			for Login.Scan() {
 				line := Login.Text()
 				if line == "99" {
 					fmt.Println("Logout...")
-					separator()
 					break
 				}
 
 				switch line {
 				case "1":
 					// Profile
-					separator()
-					fmt.Println("PROFIL SAYA")
-					separator()
-
-					listUser()
+					
+					helper.SetTitleProfile(line)
+					helper.ListUser()
 					User := bufio.NewScanner(os.Stdin)
 					for User.Scan() {
 						line := User.Text()
 						if line == "99" {
-							fmt.Println("Kembali...")
-							separator()
+							fmt.Println("BACK...")
 							break
 						}
 
 						switch line {
 						case "1":
-							// Get data user
+							// Get Data User
 
-							Get := datastore.UserDB{DB: db}
-							getUser := Get.GetAllDataUser(user_id)
-							separator()
-							fmt.Println("DETAIL PROFIL")
+							helper.SetTitleProfile(line)
+							users := Akses.GetAllDataUser(user_id)
 
-							for _, result := range getUser {
-								separator()
-								fmt.Println("Nama:", result.Name)
-								fmt.Println("Email:", result.Email)
-								fmt.Println("Password:", result.Password)
-								fmt.Println("Alamat:", result.Alamat)
-								separator()
+							for _, user := range users {
+								helper.Separator()
+								fmt.Println("Nama\t:", user.Name)
+								fmt.Println("Email\t:", user.Email)
+								fmt.Println("Alamat\t:", user.Alamat)
 							}
-
 						case "2":
 							// Edit Profile
 
-							Input := datastore.UserDB{DB: db}
-							separator()
-							fmt.Println("UBAH PROFIL SAYA")
-
-							fmt.Println(Input.EditUser(utilities_user.InputUbahUser(user_id)))
-							separator()
-
+							helper.SetTitleProfile(line)
+							status := Akses.EditUser(user.InputUbahUser(user_id))
+							helper.SetStatus(status)
 						case "3":
-							// Delete Profile
+							// Delete Account
 
-							Input := datastore.UserDB{DB: db}
-							separator()
-							fmt.Println("HAPUS AKUN SAYA")
-
-							fmt.Println(Input.DeleteUser(user_id))
-							separator()
-							list()
+							helper.SetTitleProfile(line)
+							status := Akses.DeleteUser(user_id)
+							helper.SetStatus(status)
+							helper.List()
 							Menu.Scan()
-
 						default:
-							fmt.Println("Menu Tidak Tersedia")
+							helper.Separator()
+							fmt.Println("MENU NOT FOUND")
 						}
 
-						listUser()
+						helper.ListUser()
 					}
 				case "2":
 					// Get Book
 
-					Input := datastore.BookDB{DB: db}
-					separator()
-					fmt.Println("MENAMPILKAN SEMUA BUKU")
+					helper.SetTitleLogin(line)
+					Users, status := Akses.GetBook(user_id)
+					helper.SetStatus(status)
 
-					DatabyUser := (Input.GetBook(user_id))
-					for _, result := range DatabyUser {
-						separator()
-						fmt.Println("ID :", result.ID)
-						fmt.Println("Judul :", result.Title)
-						fmt.Println("Pengarang :", result.Author)
-						separator()
+					for _, user := range Users {
+						helper.Separator()
+						fmt.Println("ID\t\t:", user.ID)
+						fmt.Println("Judul\t\t:", user.Title)
+						fmt.Println("ISBN\t\t:", user.Isbn)
+						fmt.Println("Pengarang\t:", user.Author)
 					}
 				case "3":
 					// Add Book
 
-					Input := datastore.BookDB{DB: db}
-					separator()
-					fmt.Println("MENAMBAHKAN BUKU BARU")
-					separator()
-					fmt.Println(Input.CreateBook(utilities_book.InputBook(user_id)))
-					separator()
+					helper.SetTitleLogin(line)
+					status := Akses.CreateBook(book.InputBook(user_id))
+					helper.SetStatus(status)
 				case "4":
 					// Edit Book
 
-					Input := datastore.BookDB{DB: db}
-					separator()
-					fmt.Println("MENGUBAH BUKU")
-					separator()
-					fmt.Println(Input.EditBook(utilities_book.InputUbahBook(user_id)))
-					separator()
+					helper.SetTitleLogin(line)
+					status := Akses.EditBook(book.InputUbahBook(user_id))
+					helper.SetStatus(status)
 				case "5":
 					// Delete Book
 
-					Input := datastore.BookDB{DB: db}
-					separator()
-					fmt.Println("MENGHAPUS BUKU")
-					separator()
-					fmt.Println(Input.DeleteBook(utilities_book.InputIDBook(user_id)))
-					separator()
+					helper.SetTitleLogin(line)
+					status := Akses.DeleteBook(book.InputIDBook(user_id))
+					helper.SetStatus(status)
 				case "6":
 					// Add Book
 
-					Input := datastore.RentDB{DB: db}
-					separator()
-					fmt.Println("MEMINJAM BUKU")
-					separator()
-					fmt.Println(Input.CreateRent(utilities_rent.InputRent(user_id)))
-					separator()
-
+					helper.SetTitleLogin(line)
+					status := Akses.CreateRent(rent.InputRent(user_id))
+					helper.SetStatus(status)
 				case "7":
 					// Get Rent
-
-					Input := datastore.RentDB{DB: db}
-					Output := datastore.BookDB{DB: db}
-					separator()
-					fmt.Println("MENAMPILKAN SEMUA PEMINJAMAN")
 					
-					RentbyUser := (Input.GetRent(user_id))
-					for _, result := range RentbyUser {
-						separator()
-						fmt.Println("ID :", result.ID)
-						fmt.Println("Tanggal Kembali :", result.Return_date)
-							DatabyUser := (Output.GetBook(user_id))
-							for _, result := range DatabyUser {
-								fmt.Println("\tID Buku :", result.ID)
-								fmt.Println("\tJudul :", result.Title)
-								fmt.Println("\tPengarang :", result.Author)
-							}
-						separator()
+					helper.SetTitleLogin(line)
+					Rents, status := Akses.GetRent(user_id)
+					helper.SetStatus(status)
+
+					for _, rent := range Rents {
+						helper.Separator()
+						fmt.Println("ID\t\t  :", rent.ID)
+						fmt.Println("Tanggal Kembali\t  :", rent.ReturnDate)
+						Books, _ := Akses.GetBook(user_id)
+						for _, book := range Books {
+							fmt.Println("\tID Buku\t  :", book.ID)
+							fmt.Println("\tJudul\t  :", book.Title)
+							fmt.Println("\tISBN\t  :", book.Isbn)
+							fmt.Println("\tPengarang :", book.Author)
+						}
 					}
 
 				case "8":
 					// Delete Rent
 
-					Input := datastore.RentDB{DB: db}
-					separator()
-					fmt.Println("MEMULANGKAN BUKU")
-					separator()
-					fmt.Println(Input.ReturnRent(utilities_book.InputIDBook(user_id)))
-					separator()
-				case "99":
-					fmt.Println("Logout...")
+					helper.SetTitleLogin(line)
+					status := Akses.ReturnRent(book.InputIDBook(user_id))
+					helper.SetStatus(status)
 				default:
-					fmt.Println("Menu Tidak Tersedia")
+					helper.Separator()
+					fmt.Println("MENU NOT FOUND")
 				}
 
-				listLogin()
+				helper.SetStatus(name)
+				helper.ListLogin()	
 			}
 		case "3":
 			// List Books
 
-			Get := datastore.BookDB{DB: db}
-			getAll := Get.GetAllDataBook()
-			separator()
-			fmt.Println("DAFTAR BUKU")
+			books, status := Akses.GetAllDataBook()
+			helper.SetTitleMenu(line)
+			helper.SetStatus(status)
 
-			for _, result := range getAll {
-				separator()
-				fmt.Println("ID :", result.ID)
-				fmt.Println("Judul :", result.Title)
-				fmt.Println("Pengarang :", result.Author)
-				separator()
+			for _, book := range books {
+				helper.Separator()
+				fmt.Println("ID\t:", book.ID)
+				fmt.Println("Judul\t:", book.Title)
+				fmt.Println("Pengarang\t:", book.Author)
+				helper.Separator()
 			}
-
-		case "99":
-			fmt.Println("Exit")
 		default:
-			fmt.Println("Menu Tidak Tersedia")
-			separator()
+			helper.Separator()
+			fmt.Println("MENU NOT FOUND")
 		}
 
-		list()
+		helper.List()
 	}
 
 	if err := Menu.Err(); err != nil {

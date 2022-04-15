@@ -18,8 +18,8 @@ type Config struct {
 	Password string
 }
 
-func Database(c Config) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", c.Username, c.Password, c.Host, c.Port, c.Database)
+func Database(connect Config) *gorm.DB {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", connect.Username, connect.Password, connect.Host, connect.Port, connect.Database)
 	
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 

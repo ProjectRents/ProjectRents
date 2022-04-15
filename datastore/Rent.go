@@ -2,57 +2,54 @@ package datastore
 
 import (
 	"project_apps/entities"
-
-	"gorm.io/gorm"
+	"time"
 )
 
-type RentDB struct {
-	DB *gorm.DB
-}
-
-func (c RentDB) CreateRent(user_id, book_id uint, Return_date string) string {
+func (connect DatabaseDB) CreateRent(user_id, book_id uint, return_date time.Time) string {
 	// Insert data
 
-	rents := []entities.Rent{}
-	c.DB.Where("book_id = ?", book_id).Find(&rents)
+	search := entities.Rent{}
+	connect.DB.Where("book_id = ?", book_id).Find(&search)
 
-	for _, rent := range rents {
-		if rent.BookID != book_id {
-			result := c.DB.Create(&entities.Rent{
-				UserID:      user_id,
-				BookID:      book_id,
-				Return_date: Return_date,
-			})
+	if search.BookID == book_id {
+		return "FAILED, BOOKS ALREADY RENTED"
+	} else {
+		result := connect.DB.Create(&entities.Rent{
+			UserID:     user_id,
+			BookID:     book_id,
+			ReturnDate:	return_date,
+		})
 	
-			if result.Error != nil {
-				return "GAGAL MEMINJAM BUKU"
-			}
-		} else {
-			return "BUKU SUDAH DI PINJAM"
+		if result.Error != nil {
+			return "FAILED, BOOKS NOT FOUND"
 		}
 	}
-	
-	return "BERHASIL MEMINJAM BUKU"
+
+	return "SUCCESS RENT"
 }
 
-func (c RentDB) ReturnRent(user_id, book_id uint) string {
+func (connect DatabaseDB) ReturnRent(user_id, book_id uint) string {
 	// Hapus data
-	res := []entities.Rent{}
 
-	trx := c.DB.Where("user_id = ? AND book_id = ?", user_id, book_id).Delete(&res)
+	search := entities.Rent{}
+	result := connect.DB.Where("user_id = ? AND book_id = ?", user_id, book_id).Delete(&search)
 
-	if trx.RowsAffected == 0 {
-		return "GAGAL MENGEMBALIKAN BUKU"
+	if result.RowsAffected == 0 {
+		return "FAILED, BOOKS NOT FOUND"
 	}
 
-	return "BERHASIL MENGEMBALIKAN BUKU"
+	return "SUCCESS RETURN"
 }
 
-func (c RentDB) GetRent(user_id uint) []entities.Rent {
+func (connect DatabaseDB) GetRent(user_id uint) ([]entities.Rent, string) {
 	// Get data
-	rents := []entities.Rent{}
+	
+	search := []entities.Rent{}
+	connect.DB.Where("user_id = ?", user_id).Find(&search)
 
-	c.DB.Where("user_id = ?", user_id).Find(&rents)
+	if len(search) == 0 {
+		return nil, "FAILED, RENT NOT FOUND"
+	}
 
-	return rents
+	return search, "SUCCESS, DATA DITAMPILKAN"
 }
