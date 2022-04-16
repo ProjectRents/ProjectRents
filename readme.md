@@ -29,13 +29,54 @@ Salah satu project yang dibuat untuk menyelesaikan course di Alterra Academy htt
   
   ![Hasil](./hasil/register.PNG)
   
-- ini adalah hasil ERD untuk Project Rent ini.
+- ini adalah Menu Login.
   
   ![Hasil](./hasil/login.PNG)
   
-- ini adalah hasil ERD untuk Project Rent ini.
+- ini adalah Menu Lihat Buku tanpa login.
   
   ![Hasil](./hasil/lihat_buku.PNG)
+  
+- ini adalah Menu setelah login.
+  
+  ![Hasil](./hasil/menu_setelah_login.PNG)
+  
+- ini adalah Menu profil.
+  
+  ![Hasil](./hasil/menu_profil.PNG)
+  
+- ini adalah Menu melihat profil.
+  
+  ![Hasil](./hasil/lihat_profil.PNG)
+  
+- ini adalah Menu mengubah profil.
+  
+  ![Hasil](./hasil/Update_profil.PNG)
+  
+- ini adalah Menu Lihat Buku setelah login.
+  
+  ![Hasil](./hasil/lihat_buku_login.PNG)
+  
+- ini adalah Menu Tambah buku.
+  
+  ![Hasil](./hasil/tambah_buku.PNG)
+  
+- ini adalah Menu Update Buku.
+  
+  ![Hasil](./hasil/update_buku.PNG)
+  
+- ini adalah Menu Pinjam Buku.
+  
+  ![Hasil](./hasil/pinjam_buku.PNG)
+  
+- ini adalah Menu Daftar Pinjam.
+  
+  ![Hasil](./hasil/daftar_pinjam.PNG)
+  
+- ini adalah Menu Mengembalikan Buku.
+  
+  ![Hasil](./hasil/return.PNG)
+  
   
 ## **Tech Stack**
 
