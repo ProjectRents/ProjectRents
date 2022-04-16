@@ -14,6 +14,11 @@ Salah satu project yang dibuat untuk menyelesaikan course di Alterra Academy htt
 - Buka file `MenuUtama.go` di folder `utilities` dan hilangkan tanda `//` untuk auto_migrate pertama kali
 - Lalu jalankan cmd dengan perintah `go run main.go` atau `go run .`
 
+
+## **ERD PROJECT RENT**
+
+- ini adalah hasil ERD untuk P.
+  ![ERD](./erd_project_rents.png)
 ## **Tech Stack**
 
 - Golang https://go.dev
