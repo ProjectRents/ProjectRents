@@ -22,12 +22,19 @@ Salah satu project yang dibuat untuk menyelesaikan course di Alterra Academy htt
 ## **Hasil Project Rent**
 
 - ini adalah Menu Pertama Project ini.
+  
   ![Hasil](./hasil/menu_utama.PNG)
+  
 - ini adalah Menu Register Account.
+  
   ![Hasil](./hasil/register.PNG)
+  
 - ini adalah hasil ERD untuk Project Rent ini.
+  
   ![Hasil](./hasil/login.PNG)
-  - ini adalah hasil ERD untuk Project Rent ini.
+  
+- ini adalah hasil ERD untuk Project Rent ini.
+  
   ![Hasil](./hasil/lihat_buku.PNG)
   
 ## **Tech Stack**
