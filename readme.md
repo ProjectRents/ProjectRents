@@ -8,17 +8,28 @@ Salah satu project yang dibuat untuk menyelesaikan course di Alterra Academy htt
 - Login Account
 - Rent Book (Pinjam dan Mengembalikan Buku)
 
+## **ERD PROJECT RENT**
+
+- ini adalah hasil ERD untuk Project Rent ini.
+  ![ERD](./erd_project_rents.png)
+
 ## **Getting Started**
 
 - Silahkan sesuaikan data di file `.env`
 - Buka file `MenuUtama.go` di folder `utilities` dan hilangkan tanda `//` untuk auto_migrate pertama kali
 - Lalu jalankan cmd dengan perintah `go run main.go` atau `go run .`
 
+## **Hasil Project Rent**
 
-## **ERD PROJECT RENT**
-
-- ini adalah hasil ERD untuk P.
-  ![ERD](./erd_project_rents.png)
+- ini adalah Menu Pertama Project ini.
+  ![Hasil](./hasil/menu_utama.PNG)
+- ini adalah Menu Register Account.
+  ![Hasil](./hasil/register.PNG)
+- ini adalah hasil ERD untuk Project Rent ini.
+  ![Hasil](./hasil/login.PNG)
+  - ini adalah hasil ERD untuk Project Rent ini.
+  ![Hasil](./hasil/lihat_buku.PNG)
+  
 ## **Tech Stack**
 
 - Golang https://go.dev
