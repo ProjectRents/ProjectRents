@@ -6,7 +6,6 @@ import (
 	"os"
 	"project_apps/config"
 	"project_apps/datastore"
-	"project_apps/entities"
 	"project_apps/utilities/book"
 	"project_apps/utilities/helper"
 	"project_apps/utilities/rent"
@@ -22,7 +21,7 @@ func MenuUtama() {
 	Akses := datastore.DatabaseDB{DB: db}
 	
 	// Migrate tables
-	db.AutoMigrate(&entities.User{}, &entities.Book{}, &entities.UserBook{})
+	// db.AutoMigrate(&entities.User{}, &entities.Book{}, &entities.UserBook{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -164,7 +163,7 @@ func MenuUtama() {
 						helper.Separator()
 
 						for i, j := 0, 0; i < len(hasils); i, j = i+1, j+1 {
-							fmt.Println("ID\t:", user.ID)
+							fmt.Println("ID Rent\t  :", user.ID)
 							fmt.Println("ID Buku\t  :", user.Books[i].ID)
 							fmt.Println("Judul\t  :", user.Books[i].Title)
 							fmt.Println("ISBN\t  :", user.Books[i].Isbn)
@@ -179,7 +178,7 @@ func MenuUtama() {
 					// Delete Rent
 
 					helper.SetTitleLogin(line)
-					status := Akses.ReturnRent(book.InputIDBook(user_id))
+					status := Akses.ReturnRent(rent.InputIDRent(user_id))
 					helper.SetStatus(status)
 				default:
 					helper.Separator()
