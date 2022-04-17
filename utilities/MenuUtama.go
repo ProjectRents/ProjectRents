@@ -163,7 +163,7 @@ func MenuUtama() {
 						helper.Separator()
 
 						for i, j := 0, 0; i < len(hasils); i, j = i+1, j+1 {
-							fmt.Println("ID Rent\t  :", user.ID)
+							fmt.Println("ID Rent\t  :", hasils[j].ID)
 							fmt.Println("ID Buku\t  :", user.Books[i].ID)
 							fmt.Println("Judul\t  :", user.Books[i].Title)
 							fmt.Println("ISBN\t  :", user.Books[i].Isbn)
