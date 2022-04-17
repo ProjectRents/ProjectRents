@@ -107,8 +107,7 @@ func MenuUtama() {
 							helper.SetTitleProfile(line)
 							status := Akses.DeleteUser(user_id)
 							helper.SetStatus(status)
-							helper.List()
-							Menu.Scan()
+							MenuUtama()
 						default:
 							helper.Separator()
 							fmt.Println("MENU NOT FOUND")
