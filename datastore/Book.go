@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"project_apps/entities"
+	"strings"
 )
 
 func (connect *DatabaseDB) CreateBook(title string, isbn string, author string, id uint) (string) {
@@ -9,9 +10,9 @@ func (connect *DatabaseDB) CreateBook(title string, isbn string, author string, 
 	
 	result := connect.DB.Create(&entities.Book{
 		UserID: id,
-		Title:  title,
-		Isbn:   isbn,
-		Author: author,
+		Title:  strings.ToUpper(title),
+		Isbn:   strings.ToUpper(isbn),
+		Author: strings.ToUpper(author),
 	})
 
 	if result.Error != nil {
@@ -51,9 +52,9 @@ func (connect DatabaseDB) EditBook(title, isbn, author string, user_id, book_id 
 
 	if title != "" || isbn != "" || author != ""  {
 		result := connect.DB.Where("user_id = ? AND id = ?", user_id, book_id).Updates(entities.Book{
-			Title:  title,
-			Isbn:   isbn,
-			Author: author,
+			Title:  strings.ToUpper(title),
+			Isbn:   strings.ToUpper(isbn),
+			Author: strings.ToUpper(author),
 		})
 
 		if result.RowsAffected == 0 {

@@ -24,10 +24,10 @@ func (connect DatabaseDB) CreateUser(name string, email string, password string,
 		return "EMAIL ALREADY EXIST, PLEASE CHANGE EMAIL"
 	} else {
 		result := connect.DB.Create(&entities.User{
-			Name:    name,
-			Email:   email,
+			Name:    strings.ToUpper(name),
+			Email:   strings.ToLower(email),
 			Password: password,
-			Alamat:   alamat,
+			Alamat:   strings.ToUpper(alamat),
 		})
 
 		if result.RowsAffected == 0 {
@@ -48,7 +48,7 @@ func (connect DatabaseDB) Login(email string, password string) (uint, string) {
 		return 0, "FAILED, EMAIL OR PASSWORD IS WRONG"
 	}
 
-	name := "HELLO, " + strings.ToUpper(search.Name)
+	name := "HELLO, " + search.Name
 	return search.ID, name
 }
 
@@ -61,10 +61,10 @@ func (connect DatabaseDB) EditUser(name, email, password, alamat string, user_id
 
 		if search.Email != email {
 			result := connect.DB.Where("id = ?", user_id).Updates(entities.User{
-				Name:    name,
-				Email:   email,
+				Name:    strings.ToUpper(name),
+				Email:   strings.ToLower(email),
 				Password: password,
-				Alamat:   alamat,
+				Alamat:   strings.ToUpper(alamat),
 			})
 	
 			if result.RowsAffected == 0 {

@@ -22,7 +22,7 @@ func MenuUtama() {
 	Akses := datastore.DatabaseDB{DB: db}
 	
 	// Migrate tables
-	db.AutoMigrate(&entities.User{}, &entities.Book{}, &entities.Rent{})
+	db.AutoMigrate(&entities.User{}, &entities.Book{}, &entities.UserBook{})
 
 	if db.Error != nil {
 		fmt.Println(db.Error)
@@ -158,19 +158,21 @@ func MenuUtama() {
 					// Get Rent
 					
 					helper.SetTitleLogin(line)
-					Rents, status := Akses.GetRent(user_id)
+					Users, hasils, status := Akses.GetRent(user_id)
 					helper.SetStatus(status)
 
-					for _, rent := range Rents {
+					for _, user := range Users {
 						helper.Separator()
-						fmt.Println("ID\t\t  :", rent.ID)
-						fmt.Println("Tanggal Kembali\t  :", rent.ReturnDate)
-						Books, _ := Akses.GetBook(user_id)
-						for _, book := range Books {
-							fmt.Println("\tID Buku\t  :", book.ID)
-							fmt.Println("\tJudul\t  :", book.Title)
-							fmt.Println("\tISBN\t  :", book.Isbn)
-							fmt.Println("\tPengarang :", book.Author)
+
+						for i, j := 0, 0; i < len(hasils); i, j = i+1, j+1 {
+							fmt.Println("ID\t:", user.ID)
+							fmt.Println("ID Buku\t  :", user.Books[i].ID)
+							fmt.Println("Judul\t  :", user.Books[i].Title)
+							fmt.Println("ISBN\t  :", user.Books[i].Isbn)
+							fmt.Println("Pengarang :", user.Books[i].Author)
+							fmt.Println("Rent\t  :", hasils[j].CreatedAt)
+							fmt.Println("Return\t  :", hasils[j].ReturnDate)
+							fmt.Println("")
 						}
 					}
 
